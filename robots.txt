@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sharpshark-digital.github.io/sitemap.xml

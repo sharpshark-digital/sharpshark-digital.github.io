@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sharp Shark Digital | Automatizacija i digitalni alati za male firme</title>
+  <meta name="description" content="Gradimo alate koji rade umjesto vas: automatizacija administracije (računi, PDV, JOPPD), web stranice s kalkulatorom cijena i aplikacije po mjeri za male firme u Hrvatskoj.">
+  <link rel="canonical" href="https://sharpshark-digital.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sharp Shark Digital | Automatizacija i digitalni alati za male firme">
+  <meta property="og:description" content="Manje klikanja i papira, više posla. Automatizacija administracije, web s kalkulatorom cijena i aplikacije po mjeri.">
+  <meta property="og:url" content="https://sharpshark-digital.github.io/">
+  <meta property="og:image" content="https://sharpshark-digital.github.io/assets/logo-full.png">
+  <meta property="og:locale" content="hr_HR">
+  <meta name="theme-color" content="#0A1020">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Brend tokeni (boje uzorkovane iz plavo-narančastog logotipa) ---------- */
+    :root {
+      --cyan: #00EEF7;
+      --orange: #F66A24;
+      --orange-hover: #FF7D3B;
+      --bg: #0A1020;          /* tamnoplava podloga: cijan logo se na bijelom slabo čita */
+      --bg-raised: #111A2E;   /* kartice */
+      --border: #1F2A44;
+      --text: #E8EEF7;
+      --text-muted: #9AA8BF;
+      --radius: 14px;
+      --max: 1120px;
+      --font-head: 'Montserrat', system-ui, sans-serif;  /* isti font kao natpis u logotipu */
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }  /* height:auto čuva omjer kad se slika smanji */
+    a { color: var(--cyan); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+    h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; letter-spacing: -0.01em; }
+    .accent { color: var(--orange); }
+    .cyan { color: var(--cyan); }
+
+    /* Vidljiv fokus za korisnike tipkovnice */
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+
+    /* ---------- Gumbi ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 48px; padding: 12px 24px;     /* min 44px touch target na mobitelu */
+      border-radius: 999px; border: 2px solid transparent;
+      font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer; white-space: nowrap;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: var(--orange-hover); transform: translateY(-1px); }
+    .btn-ghost { color: var(--text); border-color: var(--border); }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ---------- Zaglavlje ---------- */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(10, 16, 32, .85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .brand img { height: 30px; width: auto; }
+    .brand span { font-family: var(--font-head); font-weight: 800; font-size: 16px; letter-spacing: .02em; white-space: nowrap; }
+    @media (max-width: 420px) {
+      .brand img { height: 22px; }
+      .brand span { font-size: 13px; }
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links .btn { min-height: 40px; padding: 8px 18px; font-size: 15px; color: #fff; }
+    @media (max-width: 760px) {
+      .nav-links li:not(:last-child) { display: none; }  /* na mobitelu ostaje samo gumb za kontakt */
+    }
+
+    /* ---------- Hero ---------- */
+    .hero { padding: 72px 0 56px; position: relative; overflow: hidden; }
+    .hero::before {   /* suptilni cijan sjaj iza logotipa */
+      content: ""; position: absolute; right: -10%; top: -20%;
+      width: 640px; height: 640px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,238,247,.10), transparent 65%);
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; gap: 40px; align-items: center; grid-template-columns: 1fr; position: relative; }
+    .eyebrow {
+      display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--cyan); border: 1px solid rgba(0,238,247,.35); border-radius: 999px; padding: 5px 14px; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(34px, 6vw, 56px); font-weight: 800; }
+    .hero p.lead { margin-top: 20px; font-size: 19px; color: var(--text-muted); max-width: 560px; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .hero-logo { justify-self: center; max-width: 240px; width: 100%; }  /* na mobitelu manji, da ne gura sadržaj */
+    @media (min-width: 900px) { .hero-logo { max-width: 420px; } }
+    @media (min-width: 900px) {
+      .hero { padding: 104px 0 88px; }
+      .hero-grid { grid-template-columns: 1.15fr .85fr; }
+    }
+
+    /* ---------- Sekcije ---------- */
+    section { padding: 72px 0; }
+    .section-head { max-width: 640px; margin-bottom: 40px; }
+    .section-head h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; }
+    .section-head p { margin-top: 12px; color: var(--text-muted); }
+    .alt { background: #0D1528; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .grid { display: grid; gap: 20px; grid-template-columns: 1fr; }
+    @media (min-width: 768px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    .card {
+      background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px; transition: border-color .2s ease, transform .2s ease;
+    }
+    .card:hover { border-color: rgba(0,238,247,.45); transform: translateY(-2px); }
+    .card .icon {
+      width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center;
+      background: rgba(246,106,36,.12); color: var(--orange); margin-bottom: 18px;
+    }
+    .card h3 { font-size: 21px; font-weight: 700; margin-bottom: 10px; }
+    .card p { color: var(--text-muted); font-size: 16px; }
+    .card ul { margin-top: 14px; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+    .card li { padding-left: 22px; position: relative; color: var(--text); }
+    .card li::before { content: ""; position: absolute; left: 4px; top: 9px; width: 8px; height: 8px; border-radius: 2px; background: var(--cyan); }
+
+    /* ---------- Radovi ---------- */
+    .case { display: flex; flex-direction: column; }
+    .case .tag { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+    .case .result {
+      margin-top: 18px; padding: 14px 16px; border-left: 3px solid var(--cyan);
+      background: rgba(0,238,247,.06); border-radius: 0 10px 10px 0; font-size: 15px;
+    }
+    .case .links { margin-top: auto; padding-top: 20px; display: flex; gap: 18px; flex-wrap: wrap; }
+    .case .links a { font-weight: 600; text-decoration: none; font-size: 15px; }
+    .case .links a:hover { text-decoration: underline; }
+
+    /* ---------- Proces ---------- */
+    .steps { counter-reset: korak; list-style: none; }
+    .steps li { counter-increment: korak; position: relative; padding-left: 64px; }
+    .steps li::before {
+      content: counter(korak); position: absolute; left: 0; top: 0;
+      width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+      font-family: var(--font-head); font-weight: 800; color: var(--bg); background: var(--cyan);
+    }
+    .steps h3 { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+    .steps p { color: var(--text-muted); font-size: 16px; }
+    @media (min-width: 900px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+
+    /* ---------- Kontakt ---------- */
+    .contact {
+      text-align: center; background: linear-gradient(135deg, #111A2E, #0D1528);
+      border: 1px solid var(--border); border-radius: 20px; padding: 56px 24px;
+    }
+    .contact h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; }
+    .contact p { color: var(--text-muted); margin: 14px auto 28px; max-width: 520px; }
+    .contact .mail { display: block; margin-top: 18px; font-size: 15px; color: var(--text-muted); }
+
+    /* ---------- Podnožje ---------- */
+    footer { padding: 40px 0 48px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+    .foot { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; }
+    footer a { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="wrap nav" aria-label="Glavna navigacija">
+      <a href="#" class="brand" aria-label="Sharp Shark Digital, početak stranice">
+        <img src="assets/shark.png" alt="" width="66" height="30">
+        <span>SHARP<span class="accent">SHARK</span> DIGITAL</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#usluge">Usluge</a></li>
+        <li><a href="#radovi">Radovi</a></li>
+        <li><a href="#proces">Kako radimo</a></li>
+        <li><a href="#kontakt" class="btn btn-primary">Javite se</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">Digitalni alati za male firme</span>
+          <h1>Manje klikanja i papira.<br><span class="cyan">Više vremena za posao.</span></h1>
+          <p class="lead">Gradimo alate koji rade umjesto vas: od čitanja računa i pripreme poreznih obrazaca do web stranica koje kupcu same izračunaju cijenu.</p>
+          <div class="hero-cta">
+            <a href="#kontakt" class="btn btn-primary">Besplatan razgovor</a>
+            <a href="#radovi" class="btn btn-ghost">Pogledajte radove</a>
+          </div>
+        </div>
+        <img class="hero-logo" src="assets/logo-full.png" alt="Sharp Shark Digital logo: morski pas od strujnih krugova" width="640" height="438">
+      </div>
+    </section>
+
+    <!-- USLUGE -->
+    <section id="usluge" class="alt">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Što radimo</h2>
+          <p>Tri vrste alata, isti cilj: da posao koji se ponavlja svaki mjesec radi sam, a vi samo provjerite i odobrite.</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>
+            </div>
+            <h3>Automatizacija administracije</h3>
+            <p>Računi, izvodi i porezni obrasci bez prepisivanja.</p>
+            <ul>
+              <li>AI čita ulazne račune i sam ih upisuje</li>
+              <li>Knjiženje bankovnih izvoda</li>
+              <li>PDV, PDV-S i JOPPD XML spreman za ePoreznu</li>
+              <li>Podsjetnici na rokove</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg>
+            </div>
+            <h3>Web s kalkulatorom cijena</h3>
+            <p>Kupac sam izračuna cijenu i pošalje upit, u bilo koje doba dana.</p>
+            <ul>
+              <li>Kalkulator po vašem cjeniku</li>
+              <li>Ponuda u PDF-u automatski na mail</li>
+              <li>Upit ide ravno u vaš CRM</li>
+              <li>Prilagođeno mobitelu</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/><path d="m10 8 2-2 2 2M12 6v6"/></svg>
+            </div>
+            <h3>Aplikacije po mjeri</h3>
+            <p>Kad gotov softver ne odgovara, napravimo onaj koji odgovara.</p>
+            <ul>
+              <li>Web i mobilne aplikacije (PWA)</li>
+              <li>AI funkcije: čitanje slika i dokumenata</li>
+              <li>Interni alati i nadzorne ploče</li>
+              <li>Povezivanje postojećih sustava</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- RADOVI -->
+    <section id="radovi">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Radovi</h2>
+          <p>Alati koji već rade u stvarnom poslovanju.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card case">
+            <span class="tag">Automatizacija administracije</span>
+            <h3>Porezni obrasci za 2LMF PRO</h3>
+            <p>Računi stranih dobavljača (Google, Anthropic) prolaze AI čitanje, provjeru i generiranje PDV i PDV-S obrazaca. Isti sustav priprema JOPPD za plaće.</p>
+            <div class="result">PDV i PDV-S predani na ePoreznu iz generiranih XML-ova. JOPPD znak po znak identičan onome koji radi knjigovođa.</div>
+          </article>
+          <article class="card case">
+            <span class="tag">Web s kalkulatorom cijena</span>
+            <h3>Kalkulator materijala i ponuda</h3>
+            <p>Kupac odabere proizvode i dimenzije, kalkulator izračuna cijenu, a ponuda stiže na mail u PDF-u. Upit se istovremeno upisuje u CRM.</p>
+            <div class="links">
+              <a href="https://2lmf-pro.hr/kalkulator.html" target="_blank" rel="noopener">Isprobajte kalkulator &rarr;</a>
+            </div>
+          </article>
+          <article class="card case">
+            <span class="tag">Aplikacija po mjeri</span>
+            <h3>CalorieShark</h3>
+            <p>Mobilna web aplikacija koja fotografiju obroka pretvara u kalorije i makronutrijente, uz praćenje cilja, težine i napretka.</p>
+            <div class="links">
+              <a href="https://2lmf-pro.hr/calorieshark/" target="_blank" rel="noopener">Otvorite aplikaciju &rarr;</a>
+              <a href="https://2lmf-pro.hr/calorieshark.html" target="_blank" rel="noopener">Opis projekta</a>
+            </div>
+          </article>
+          <article class="card case">
+            <span class="tag">Interni alat</span>
+            <h3>CRM za upite, ponude i račune</h3>
+            <p>Upit s weba postaje ponuda, ponuda postaje račun, a račun se knjiži, sve iz jedne tablice, bez prepisivanja podataka.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCES -->
+    <section id="proces" class="alt">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Kako radimo</h2>
+          <p>Bez velikih projekata unaprijed. Krećemo od onoga što vam danas oduzima najviše vremena.</p>
+        </div>
+        <ol class="steps grid">
+          <li><h3>Razgovor</h3><p>Besplatno, 30 minuta. Pokažete nam što radite ručno, a mi kažemo što se može automatizirati.</p></li>
+          <li><h3>Prijedlog i cijena</h3><p>Jasan opis rješenja i fiksna cijena, bez iznenađenja.</p></li>
+          <li><h3>Izrada uz testiranje</h3><p>Alat testiramo na vašim stvarnim podacima prije nego što ga počnete koristiti.</p></li>
+          <li><h3>Podrška</h3><p>Ostajemo dostupni za izmjene, nadogradnje i nove ideje.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt">
+      <div class="wrap">
+        <div class="contact">
+          <h2>Što vam oduzima <span class="accent">najviše vremena?</span></h2>
+          <p>Napišite nam u dvije rečenice. Odgovaramo isti ili sljedeći radni dan s prijedlogom kako to riješiti.</p>
+          <a class="btn btn-primary" href="mailto:sharpshark.digital@gmail.com?subject=Upit%20sa%20weba%20-%20Sharp%20Shark%20Digital">Pošaljite upit</a>
+          <a class="mail" href="mailto:sharpshark.digital@gmail.com">sharpshark.digital@gmail.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>&copy; 2026 Sharp Shark Digital, digitalni odjel tvrtke 2LMF PRO j.d.o.o., Orešje 7, 10090 Zagreb, OIB 29766043828</span>
+      <a href="https://2lmf-pro.hr/" target="_blank" rel="noopener">2lmf-pro.hr</a>
+    </div>
+  </footer>
+
+</body>
+</html>
